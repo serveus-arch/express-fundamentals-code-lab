@@ -11,4 +11,10 @@ app.get("/", function (req, res) {
   res.send("Bienvenido a la api de ADA Cars");
 });
 
-module.exports = app;
+// Instancia del servidor
+const server = app.listen(PORT, () => {
+  console.log(`listening on port http://localhost:${PORT}`);
+});
+
+// Exportación del servidor
+module.exports = server;
