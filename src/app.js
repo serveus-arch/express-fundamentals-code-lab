@@ -11,6 +11,8 @@ app.get("/", function (req, res) {
   res.send("Bienvenido a la api de ADA Cars");
 });
 
+
+//Se recomienda no editar ni eliminar la instancia del servidor.
 // Instancia del servidor
 const server = app.listen(PORT, () => {
   console.log(`listening on port http://localhost:${PORT}`);
