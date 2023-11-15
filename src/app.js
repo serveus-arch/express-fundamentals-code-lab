@@ -3,6 +3,7 @@ const app = express();
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
+require('dotenv').config();
 
 const SECRET_KEY = process.env.JWT_SECRET || "HS256";
 const PORT = process.env.PORT || 3000;
@@ -89,5 +90,42 @@ process.on("SIGINT", () => {
     process.exit(0);
   });
 });
+
+app.post('/login', (req, res) => {
+  // Simulación de una autenticación en la base de datos
+  const user = {
+     username: 'John',
+     password: '12345'
+  };
+ 
+  // Comparación de las credenciales recibidas con las del usuario
+  if (req.body.username === user.username && req.body.password === user.password) {
+     // Generación del JWT
+     const jwtToken = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+ 
+     // Envío del JWT como respuesta
+     res.json({ token: jwtToken });
+  } else {
+     res.status(401).json({ message: 'Autenticación fallida' });
+  }
+ });
+
+ app.get('/protected', (req, res) => {
+  // Extracción del token JWT desde el header de autorización
+  const token = req.headers.authorization.split(' ')[1];
+ 
+  // Validación del token JWT
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+     if (err) {
+       res.status(401).json({ message: 'Token no válido' });
+     } else {
+       res.json({ message: 'Acceso concedido', username: decoded.username });
+     }
+  });
+ });
+
+
+
+
 
 module.exports=server;
